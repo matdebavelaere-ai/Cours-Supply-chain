@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supply Chain — Cours de niveau Master</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #0f0e0c;
+    --paper:     #f5f1ea;
+    --cream:     #ede8df;
+    --rust:      #b8490a;
+    --gold:      #c89a2e;
+    --steel:     #3a5068;
+    --muted:     #7a7060;
+    --divider:   #d4cfc5;
+    --highlight: #fdf3e3;
+    --code-bg:   #1e1c18;
+    --code-text: #e8dfc8;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  /* ── SIDEBAR NAV ── */
+  #sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    width: 260px;
+    height: 100vh;
+    background: var(--ink);
+    color: #c8c0b0;
+    padding: 2rem 1.5rem;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  #sidebar .brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #333;
+  }
+  #sidebar nav a {
+    display: block;
+    color: #9a9080;
+    text-decoration: none;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    padding: 0.35rem 0;
+    border-left: 2px solid transparent;
+    padding-left: 0.75rem;
+    transition: all 0.2s;
+  }
+  #sidebar nav a:hover, #sidebar nav a.active {
+    color: var(--gold);
+    border-left-color: var(--gold);
+  }
+  #sidebar nav .nav-section {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #554e40;
+    margin-top: 1.5rem;
+    margin-bottom: 0.25rem;
+    padding-left: 0.75rem;
+  }
+
+  /* ── MAIN CONTENT ── */
+  #main {
+    margin-left: 260px;
+    padding: 0 4rem 6rem 4rem;
+    max-width: 960px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 5rem 0 3rem;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 4rem;
+  }
+  .hero .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.8rem;
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--rust);
+  }
+  .hero .subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 600px;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 2rem;
+  }
+  .hero .meta {
+    display: flex;
+    gap: 2.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .hero .meta span strong { color: var(--ink); }
+
+  /* ── SECTION HEADINGS ── */
+  .chapter {
+    margin-bottom: 5rem;
+    padding-top: 1rem;
+  }
+  .chapter-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--divider);
+  }
+  .chapter-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--cream);
+    flex-shrink: 0;
+    user-select: none;
+    -webkit-text-stroke: 1.5px var(--divider);
+  }
+  .chapter-title-group h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+  .chapter-title-group .chapter-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rust);
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 2.5rem 0 0.75rem;
+    color: var(--ink);
+  }
+  h4 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 1.75rem 0 0.5rem;
+    color: var(--steel);
+  }
+
+  p { margin-bottom: 1rem; }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-left: 3px solid var(--rust);
+    background: var(--highlight);
+    padding: 1rem 1.25rem;
+    margin: 1.75rem 0;
+    font-size: 0.93rem;
+  }
+  .callout.steel { border-left-color: var(--steel); }
+  .callout.gold  { border-left-color: var(--gold); }
+  .callout strong { color: var(--rust); font-weight: 600; }
+  .callout.steel strong { color: var(--steel); }
+  .callout.gold  strong { color: var(--gold); }
+
+  .def-box {
+    background: var(--cream);
+    border: 1px solid var(--divider);
+    border-top: 3px solid var(--ink);
+    padding: 1.25rem 1.5rem;
+    margin: 1.75rem 0;
+  }
+  .def-box .def-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+  .def-box p { margin: 0; font-style: italic; }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  .stat-card {
+    background: var(--ink);
+    color: #c8c0b0;
+    padding: 1.25rem 1rem;
+    text-align: center;
+  }
+  .stat-card .stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .stat-card .stat-lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    line-height: 1.3;
+  }
+  .stat-card .stat-src {
+    font-size: 0.6rem;
+    opacity: 0.4;
+    margin-top: 0.4rem;
+    font-style: italic;
+  }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; margin: 2rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  thead tr {
+    background: var(--ink);
+    color: var(--gold);
+  }
+  thead th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-weight: 500;
+  }
+  tbody tr { border-bottom: 1px solid var(--divider); }
+  tbody tr:nth-child(even) { background: var(--cream); }
+  tbody td {
+    padding: 0.65rem 1rem;
+    vertical-align: top;
+  }
+  tbody td:first-child { font-weight: 600; }
+
+  /* ── KPI LIST ── */
+  .kpi-list {
+    list-style: none;
+    margin: 1.25rem 0;
+  }
+  .kpi-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--divider);
+    font-size: 0.92rem;
+  }
+  .kpi-list li .kpi-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--steel);
+    flex: 0 0 180px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .kpi-list li .kpi-desc { flex: 1; color: var(--ink); }
+
+  /* ── SOURCE TAG ── */
+  .src {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    background: var(--cream);
+    padding: 0.1em 0.4em;
+    border: 1px solid var(--divider);
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  /* ── CHAIN DIAGRAM ── */
+  .chain-diagram {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 2.5rem 0;
+    overflow-x: auto;
+  }
+  .chain-node {
+    flex: 1;
+    min-width: 100px;
+    background: var(--steel);
+    color: white;
+    padding: 1rem 0.75rem;
+    text-align: center;
+    position: relative;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.3;
+    transition: background 0.2s;
+  }
+  .chain-node:hover { background: var(--rust); cursor: default; }
+  .chain-node:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: -12px; top: 50%;
+    transform: translateY(-50%);
+    border-left: 12px solid var(--steel);
+    border-top: 22px solid transparent;
+    border-bottom: 22px solid transparent;
+    z-index: 2;
+  }
+  .chain-node:hover::after { border-left-color: var(--rust); }
+  .chain-node .node-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
+  .chain-node.active { background: var(--rust); }
+  .chain-node.active::after { border-left-color: var(--rust); }
+
+  /* ── ENJEUX GRID ── */
+  .enjeux-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.75rem 0;
+  }
+  .enjeu-card {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--divider);
+  }
+  .enjeu-card .enjeu-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .enjeu-card.strat .enjeu-type { color: var(--rust); }
+  .enjeu-card.econ  .enjeu-type { color: var(--gold); }
+  .enjeu-card.fin   .enjeu-type { color: var(--steel); }
+  .enjeu-card.hum   .enjeu-type { color: #5a8a3a; }
+  .enjeu-card ul { list-style: none; font-size: 0.88rem; }
+  .enjeu-card ul li::before { content: '→ '; color: var(--muted); }
+
+  /* ── REFERENCES ── */
+  .references {
+    background: var(--ink);
+    color: #a09880;
+    padding: 3rem 3.5rem;
+    margin: 4rem -4rem -6rem;
+  }
+  .references h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .references ol {
+    font-size: 0.8rem;
+    line-height: 1.7;
+    padding-left: 1.5rem;
+    columns: 2;
+    gap: 2rem;
+  }
+  .references ol li { margin-bottom: 0.5rem; }
+  .references ol li strong { color: #c8c0b0; }
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 260px; right: 0;
+    height: 3px;
+    background: var(--rust);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.1s;
+    z-index: 200;
+  }
+
+  /* ── FORMULA BOX ── */
+  .formula {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 1rem 1.5rem;
+    margin: 1.25rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+  .formula .comment { color: #6a6050; }
+  .formula .hl { color: var(--gold); }
+
+  /* ── SCROLL ANIMATION ── */
+  .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.5s, transform 0.5s; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    #sidebar { display: none; }
+    #main { margin-left: 0; padding: 0 1.5rem 4rem; }
+    .enjeux-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2.4rem; }
+    .references { margin: 4rem -1.5rem -4rem; padding: 2rem 1.5rem; }
+    .references ol { columns: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="brand">Cours Master · Supply Chain</div>
+  <nav>
+    <a href="#intro">Introduction générale</a>
+    <div class="nav-section">Maillons</div>
+    <a href="#appro">① Approvisionnement</a>
+    <a href="#prod">② Production & Fabrication</a>
+    <a href="#stock">③ Stockage & Entreposage</a>
+    <a href="#distrib">④ Distribution & Livraison</a>
+    <a href="#sav">⑤ Service Après-Vente</a>
+    <div class="nav-section">Transversal</div>
+    <a href="#numerique">Transformation numérique</a>
+    <a href="#resilience">Résilience & risques</a>
+    <a href="#durabilite">Durabilité & RSE</a>
+    <a href="#biblio">Références</a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- HERO -->
+  <header class="hero" id="top">
+    <div class="tag">Cours de niveau Master · Génie Industriel & Management</div>
+    <h1>Supply<br><em>Chain</em><br>Management</h1>
+    <p class="subtitle">De l'approvisionnement au service après-vente — principes, modèles et enjeux stratégiques, économiques, financiers et humains</p>
+    <div class="meta">
+      <span><strong>Niveau</strong> · Master 2 / Bac+5</span>
+      <span><strong>Discipline</strong> · Génie Industriel, Logistique</span>
+      <span><strong>Référentiel</strong> · SCOR v12 · APICS · CSCMP</span>
+    </div>
+  </header>
+
+  <!-- CHAPITRE 0 : INTRODUCTION -->
+  <section class="chapter fade-in" id="intro">
+    <div class="chapter-header">
+      <div class="chapter-num">00</div>
+      <div class="chapter-title-group">
+        <div class="chapter-sub">Fondements</div>
+        <h2>Introduction & Modèles de référence</h2>
+      </div>
+    </div>
+
+    <div class="def-box">
+      <div class="def-label">Définition — CSCMP (Council of Supply Chain Management Professionals, 2023)</div>
+      <p>« La supply chain (chaîne logistique) englobe la planification et la gestion de toutes les activités d'approvisionnement, de procurement, de transformation, et toutes les activités logistiques. Elle inclut également la coordination et la collaboration avec les partenaires du canal — fournisseurs, intermédiaires, prestataires de services tiers et clients. »</p>
+    </div>
+
+    <p>La supply chain est souvent confondue avec la logistique, qui n'en est qu'un sous-ensemble opérationnel. Le SCM (<em>Supply Chain Management</em>) est une discipline intégrative qui englobe des dimensions stratégiques (make or buy, sourcing géographique), tactiques (planification, MRP) et opérationnelles (transport, entreposage).</p>
+
+    <h3>1.1 Périmètre et représentation systémique</h3>
+    <p>On distingue classiquement deux grandes visions :</p>
+    <ul style="list-style:none;padding-left:0.5rem;">
+      <li style="padding:0.3rem 0;border-bottom:1px dashed var(--divider);">→ <strong>Chaîne interne</strong> : flux entre fonctions d'une même entreprise (achats → production → distribution)</li>
+      <li style="padding:0.3rem 0;border-bottom:1px dashed var(--divider);">→ <strong>Chaîne externe / réseau</strong> : ensemble des entreprises en amont (fournisseurs de rang 1, 2, n) et en aval (distributeurs, clients finaux)</li>
+    </ul>
+
+    <div class="chain-diagram">
+      <div class="chain-node"><div class="node-icon">⛏</div>Fournisseurs<br>rang N</div>
+      <div class="chain-node active"><div class="node-icon">📦</div>Appro-<br>visionnement</div>
+      <div class="chain-node active"><div class="node-icon">⚙️</div>Production &<br>Fabrication</div>
+      <div class="chain-node active"><div class="node-icon">🏭</div>Stockage &<br>Entreposage</div>
+      <div class="chain-node active"><div class="node-icon">🚚</div>Distribution &<br>Livraison</div>
+      <div class="chain-node active"><div class="node-icon">🔧</div>SAV &<br>Retours</div>
+      <div class="chain-node"><div class="node-icon">👤</div>Client<br>final</div>
+    </div>
+
+    <h3>1.2 Le modèle SCOR (Supply Chain Operations Reference)</h3>
+    <p>Développé par le <em>Supply Chain Council</em> (aujourd'hui intégré à l'APICS/ASCM), le modèle SCOR est la référence internationale de modélisation, d'évaluation et d'amélioration des supply chains. Sa version actuelle est <strong>SCOR DS v4.0</strong> (2023).</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Processus SCOR</th>
+            <th>Description</th>
+            <th>Niveau décisionnel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Plan</td><td>Équilibrage offre/demande, planification S&OP</td><td>Stratégique / Tactique</td></tr>
+          <tr><td>Source</td><td>Approvisionnement, sélection fournisseurs, achats</td><td>Tactique / Opérationnel</td></tr>
+          <tr><td>Make</td><td>Fabrication, ordonnancement, MES</td><td>Opérationnel</td></tr>
+          <tr><td>Deliver</td><td>Gestion commandes, transport, livraison</td><td>Opérationnel</td></tr>
+          <tr><td>Return</td><td>Logistique inverse, SAV, recyclage</td><td>Opérationnel</td></tr>
+          <tr><td>Enable</td><td>Gestion des règles métier, données, conformité</td><td>Transversal</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>1.3 Poids économique mondial</h3>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">19 T$</div>
+        <div class="stat-lbl">Dépenses logistiques mondiales / an</div>
+        <div class="stat-src">Armstrong & Associates, 2023</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">~10 %</div>
+        <div class="stat-lbl">Part du PIB mondial</div>
+        <div class="stat-src">World Bank, 2023</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">2,7 %</div>
+        <div class="stat-lbl">Croissance annuelle (CAGR 2023-2028)</div>
+        <div class="stat-src">Mordor Intelligence, 2023</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">37 M</div>
+        <div class="stat-lbl">Emplois directs en logistique (UE+USA)</div>
+        <div class="stat-src">Eurostat + BLS, 2023</div>
+      </div>
+    </div>
+
+    <div class="callout steel">
+      <strong>Note méthodologique :</strong> Les coûts logistiques représentent en moyenne <strong>8 à 10 % du chiffre d'affaires</strong> des entreprises industrielles (McKinsey Global Institute, <em>Supply Chains: Resilience, Sustainability and After Covid-19</em>, 2021). Cette proportion peut atteindre 30 % dans certains secteurs de la distribution alimentaire <span class="src">GS1 France, 2022</span>.
+    </div>
+
+    <h3>1.4 Les flux de la supply chain</h3>
+    <p>Trois catégories de flux coexistent et doivent être pilotés de manière intégrée :</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Type de flux</th><th>Direction</th><th>Exemples</th><th>Outils de pilotage</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Flux physiques</td><td>Fournisseurs → Clients</td><td>Matières premières, produits finis, emballages</td><td>WMS, TMS, MES</td></tr>
+          <tr><td>Flux d'information</td><td>Bidirectionnel</td><td>Commandes, prévisions de vente, EDI, traçabilité</td><td>ERP, APS, EDI/XML</td></tr>
+          <tr><td>Flux financiers</td><td>Clients → Fournisseurs</td><td>Paiements, crédits documentaires, acomptes</td><td>Supply Chain Finance (SCF), BNPL</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 1 : APPROVISIONNEMENT -->
+  <section class="chapter fade-in" id="appro">
+    <div class="chapter-header">
+      <div class="chapter-num">01</div>
+      <div class="chapter-title-group">
+        <div class="chapter-sub">Premier maillon</div>
+        <h2>Approvisionnement & Achats</h2>
+      </div>
+    </div>
+
+    <p>L'approvisionnement (<em>sourcing & procurement</em>) est la fonction qui garantit la disponibilité des ressources nécessaires à la production et à la livraison, au bon moment, au bon coût et en quantité suffisante. Elle intègre les achats stratégiques, la gestion des fournisseurs et la planification des besoins.</p>
+
+    <h3>1.1 Définitions opérationnelles</h3>
+    <div class="def-box">
+      <div class="def-label">Procurement vs Purchasing vs Sourcing</div>
+      <p><strong>Purchasing</strong> (achats transactionnels) : émission et traitement des bons de commande. — <strong>Sourcing</strong> : identification, évaluation et sélection des fournisseurs. — <strong>Procurement</strong> : terme englobant l'ensemble du cycle, du besoin à la réception et au paiement (<em>Purchase-to-Pay</em>, P2P).</p>
+    </div>
+
+    <h3>1.2 Modèles de gestion des approvisionnements</h3>
+
+    <h4>A — La matrice de Kraljic (1983)</h4>
+    <p>Peter Kraljic (McKinsey) propose en 1983 dans la <em>Harvard Business Review</em> une segmentation des achats selon deux axes : <strong>impact financier</strong> (importance pour la rentabilité) et <strong>complexité d'approvisionnement</strong> (risque fournisseur). Cela génère quatre familles :</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Quadrant</th><th>Caractéristiques</th><th>Stratégie recommandée</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Non critiques</td><td>Faible impact financier, faible risque</td><td>Standardisation, automatisation (e-procurement)</td></tr>
+          <tr><td>Leviers</td><td>Fort impact financier, faible risque</td><td>Pression sur les prix, appels d'offres compétitifs</td></tr>
+          <tr><td>Goulots</td><td>Faible impact financier, fort risque</td><td>Sécurisation des stocks, dual sourcing</td></tr>
+          <tr><td>Stratégiques</td><td>Fort impact financier, fort risque</td><td>Partenariats long terme, intégration verticale</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>B — Méthodes de planification des besoins</h4>
+    <p>La planification quantitative s'appuie sur deux grandes approches :</p>
+
+    <div class="formula">
+      <span class="comment">// Modèle de Wilson (EOQ — Economic Order Quantity, 1913)</span><br>
+      <span class="hl">Q* = √( 2 · D · S / H )</span><br><br>
+      <span class="comment">// où :</span><br>
+      D  = Demande annuelle (unités/an)<br>
+      S  = Coût de passation d'une commande (€/commande)<br>
+      H  = Coût de possession unitaire annuel (€/unité/an)  [typiquement 20–30 % du prix d'achat]<br><br>
+      <span class="comment">// Limite : suppose une demande constante et un délai de réapprovisionnement fixe</span>
+    </div>
+
+    <p>La méthode <strong>MRP</strong> (<em>Material Requirements Planning</em>, Orlicky 1964) dépasse ces limites en calculant les besoins nets à partir du plan directeur de production (PDP) et des nomenclatures (BOM — <em>Bill of Materials</em>). Le <strong>MRP II</strong> intègre en plus les capacités machines et la main-d'œuvre.</p>
+
+    <div class="formula">
+      Besoin net (n) = Besoin brut (n) − Stock disponible (n-1) − Commandes en cours (n)
+      <br><span class="comment">// Le besoin brut est issu de l'explosion de nomenclature depuis le PDP</span>
+    </div>
+
+    <h3>1.3 Indicateurs clés (KPIs) de l'approvisionnement</h3>
+    <ul class="kpi-list">
+      <li><span class="kpi-name">OTD Fournisseur</span><span class="kpi-desc">On-Time Delivery : taux de livraisons dans les délais convenus. Benchmark sectoriel : &gt; 95 % <span class="src">Gartner, 2022</span></span></li>
+      <li><span class="kpi-name">Taux de service</span><span class="kpi-desc">Part des demandes satisfaites sans rupture. Cible industrie : 98–99 %</span></li>
+      <li><span class="kpi-name">DPO</span><span class="kpi-desc">Days Payable Outstanding : délai moyen de règlement des fournisseurs. France : 52 jours en moyenne <span class="src">Banque de France, 2023</span></span></li>
+      <li><span class="kpi-name">TCO</span><span class="kpi-desc">Total Cost of Ownership : coût total intégrant prix d'achat, transport, qualité, stockage, risque</span></li>
+      <li><span class="kpi-name">Maverick buying</span><span class="kpi-desc">Part des achats hors contrat. Objectif : &lt; 5 %</span></li>
+      <li><span class="kpi-name">Couverture contractuelle</span><span class="kpi-desc">% des dépenses sous contrat-cadre. Entreprises matures : &gt; 80 % <span class="src">Deloitte CPO Survey, 2023</span></span></li>
+    </ul>
+
+    <h3>1.4 Enjeux stratégiques, économiques, financiers et humains</h3>
+    <div class="enjeux-grid">
+      <div class="enjeu-card strat">
+        <div class="enjeu-type">⚡ Stratégique</div>
+        <ul>
+          <li>Make or Buy : externalisation vs intégration verticale</li>
+          <li>Géopolitique : reshoring, nearshoring, friendshoring post-COVID</li>
+          <li>Dual / multi-sourcing pour résilience</li>
+          <li>Sélection fournisseurs selon critères ESG (Scope 3 GHG)</li>
+        </ul>
+      </div>
+      <div class="enjeu-card econ">
+        <div class="enjeu-type">📈 Économique</div>
+        <ul>
+          <li>Les achats représentent 50–80 % du CA en industrie manufacturière <span class="src">INSEE, 2022</span></li>
+          <li>Une réduction de 1 % des coûts d'achat ≈ effet équivalent à +5 % CA pour un industriel à marge 10 %</li>
+          <li>Inflation des matières premières : indice CRB +38 % entre 2020 et 2022 <span class="src">CRB Reuters, 2023</span></li>
+        </ul>
+      </div>
+      <div class="enjeu-card fin">
+        <div class="enjeu-type">💰 Financier</div>
+        <ul>
+          <li>Immobilisation BFR : chaque jour de DPO supplémentaire libère ~3 M€ pour un groupe à 1 Md€ d'achats</li>
+          <li>Supply Chain Finance (SCF / reverse factoring) : volume mondial de 2,2 T$ <span class="src">BCR / ICC, 2023</span></li>
+          <li>Risque de crédit fournisseur : défaillances en hausse de 21 % en France en 2023 <span class="src">Altares, 2024</span></li>
+        </ul>
+      </div>
+      <div class="enjeu-card hum">
+        <div class="enjeu-type">👥 Humain</div>
+        <ul>
+          <li>Pénurie d'acheteurs qualifiés : 40 % des postes de procurement en tension <span class="src">Deloitte, 2023</span></li>
+          <li>Transformation des métiers par l'IA générative (rédaction cahiers des charges, négociation assistée)</li>
+          <li>Conditions de travail dans la chaîne fournisseurs (devoir de vigilance, Loi Sapin II)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Donnée clé :</strong> Selon McKinsey (<em>The resilient supply chain</em>, 2020), les entreprises dotées d'une gestion proactive des fournisseurs ont récupéré <strong>2,3× plus vite</strong> les perturbations liées au COVID-19 que leurs concurrents.
+    </div>
+  </section>
+
+  <!-- CHAPITRE 2 : PRODUCTION -->
+  <section class="chapter fade-in" id="prod">
+    <div class="chapter-header">
+      <div class="chapter-num">02</div>
+      <div class="chapter-title-group">
+        <div class="chapter-sub">Deuxième maillon</div>
+        <h2>Production & Fabrication</h2>
+      </div>
+    </div>
+
+    <p>Le maillon production est le cœur de valeur ajoutée de la supply chain. Il transforme les matières premières et composants en produits finis selon un plan de production, en cherchant à maximiser la productivité, la qualité et la flexibilité tout en minimisant les coûts et les gaspillages.</p>
+
+    <h3>2.1 Modes de production et positionnement stratégique</h3>
+    <p>Le choix du mode de production découle directement de la stratégie produit-marché. On distingue :</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Mode</th><th>Acronyme</th><th>Principe</th><th>Secteurs typiques</th><th>Délai client (OTIF)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Make to Stock</td><td>MTS</td><td>Production sur prévisions, stock tampon</td><td>Grande conso, FMCG</td><td>Court (&lt; 24h)</td></tr>
+          <tr><td>Assemble to Order</td><td>ATO</td><td>Sous-ensembles en stock, assemblage final sur commande</td><td>Automobile, informatique</td><td>Moyen (jours)</td></tr>
+          <tr><td>Make to Order</td><td>MTO</td><td>Production démarrée à réception commande</td><td>Machines-outils, naval</td><td>Long (semaines–mois)</td></tr>
+          <tr><td>Engineer to Order</td><td>ETO</td><td>Conception + fabrication sur spec. client</td><td>Aéronautique, BTP spécifique</td><td>Très long (mois–années)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Le concept de <strong>CODP</strong> (<em>Customer Order Decoupling Point</em> ou point de pénétration commande) désigne le point de la chaîne à partir duquel la production est tirée par la demande réelle plutôt que par des prévisions. Son positionnement est un levier stratégique majeur.</p>
+
+    <h3>2.2 Philosophies de gestion de la production</h3>
+
+    <h4>A — Lean Manufacturing (Toyota Production System)</h4>
+    <p>Le Lean, formalisé par Taiichi Ohno chez Toyota dans les années 1950-70 et théorisé par Womack, Jones & Roos dans <em>The Machine That Changed the World</em> (1990), vise l'élimination des <strong>Muda</strong> (gaspillages). Les 7+1 Muda classiques sont :</p>
+
+    <div class="callout steel">
+      <strong>Les 8 Muda (TIM WOODS) :</strong> Transport inutile — Inventory (surstock) — Motion (déplacements inutiles) — Waiting (attente) — Overproduction (surproduction) — Over-processing (surtraitement) — Defects (défauts) — Skills (non-utilisation des compétences)
+    </div>
+
+    <p>L'adoption du Lean a permis à Toyota de réduire ses délais de production de <strong>50 à 80 %</strong> entre 1960 et 1990 <span class="src">Womack & Jones, Lean Thinking, 1996</span>. En 2022, une étude sur 212 entreprises industrielles européennes montre que les entreprises « Lean matures » affichent une productivité du travail supérieure de <strong>25 %</strong> en moyenne <span class="src">Fraunhofer IPA, 2022</span>.</p>
+
+    <h4>B — Theory of Constraints (TOC)</h4>
+    <p>Élaborée par Eliyahu Goldratt (<em>The Goal</em>, 1984), la TOC postule que la performance d'un système est limitée par son <strong>contrainte</strong> (goulot). Le cycle d'amélioration se résume à 5 étapes :</p>
+    <ol style="padding-left:1.5rem;line-height:2;">
+      <li>Identifier la contrainte</li>
+      <li>L'exploiter au maximum (ne jamais la laisser oisive)</li>
+      <li>Subordonner toutes les autres ressources à la contrainte</li>
+      <li>Élever la contrainte (investissement si nécessaire)</li>
+      <li>Revenir à l'étape 1 (la contrainte a changé)</li>
+    </ol>
+
+    <h4>C — Six Sigma</h4>
+    <p>Développée chez Motorola (Bill Smith, 1986) et popularisée par GE (Jack Welch, 1995), la démarche Six Sigma vise à réduire la variabilité des processus pour atteindre un niveau de défauts inférieur à <strong>3,4 DPMO</strong> (défauts par million d'opportunités), correspondant à un niveau σ = 6.</p>
+
+    <div class="formula">
+      <span class="hl">σ-level</span> = f(Cp, Cpk)<br>
+      Cp  = (USL − LSL) / (6σ)     <span class="comment">// Indice de capabilité</span><br>
+      Cpk = min[(USL − μ)/(3σ) , (μ − LSL)/(3σ)]  <span class="comment">// Indice de capabilité centré</span><br><br>
+      <span class="comment">// Cible Six Sigma : Cpk ≥ 1,67 (soit 6σ avec décalage centrage ±1,5σ)</span>
+    </div>
+
+    <p>GE a économisé plus de <strong>10 milliards de dollars</strong> entre 1995 et 2000 grâce à Six Sigma <span class="src">Welch, Jack: Straight from the Gut, 2001</span>.</p>
+
+    <h3>2.3 Planification et ordonnancement</h3>
+    <p>La hiérarchie de planification industrielle (<em>Anthony, 1965</em> ; reprise dans la norme APICS) distingue :</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Niveau</th><th>Horizon</th><th>Granularité</th><th>Outil</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>S&OP (Sales & Ops Planning)</td><td>3–18 mois</td><td>Famille de produits</td><td>APS, Excel avancé</td></tr>
+          <tr><td>MPS (Master Production Schedule / PDP)</td><td>4–12 semaines</td><td>Référence produit</td><td>ERP (SAP PP, Oracle SCM)</td></tr>
+          <tr><td>MRP / MRP II</td><td>1–8 semaines</td><td>Composant / ressource</td><td>ERP</td></tr>
+          <tr><td>Ordonnancement (scheduling)</td><td>Journée à semaine</td><td>Opération machine</td><td>MES, APS (Preactor, etc.)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>2.4 Indicateurs clés de la production</h3>
+    <ul class="kpi-list">
+      <li><span class="kpi-name">OEE / TRS</span><span class="kpi-desc">Overall Equipment Effectiveness = Disponibilité × Performance × Qualité. Benchmark « world class » : OEE &gt; 85 % <span class="src">JIPM, 2021</span>. Moyenne européenne : ~55–65 %</span></li>
+      <li><span class="kpi-name">Takt Time</span><span class="kpi-desc">Takt = Temps disponible / Demande client. Cadence idéale à atteindre pour satisfaire la demande sans surproduction</span></li>
+      <li><span class="kpi-name">Lead Time</span><span class="kpi-desc">Délai de fabrication total. Objectif Lean : réduction de 50 % sur 3 ans via VSM + Kaizen</span></li>
+      <li><span class="kpi-name">FTY / FTT</span><span class="kpi-desc">First Time Yield / First Time Through : taux de conformité au premier passage. Cible : &gt; 99 % en automobile</span></li>
+      <li><span class="kpi-name">MTBF / MTTR</span><span class="kpi-desc">Mean Time Between Failures / Mean Time To Repair. Indicateurs de fiabilité et maintenance (cf. TPM)</span></li>
+    </ul>
+
+    <h3>2.5 Enjeux</h3>
+    <div class="enjeux-grid">
+      <div class="enjeu-card strat">
+        <div class="enjeu-type">⚡ Stratégique</div>
+        <ul>
+          <li>Industrie 4.0 : IoT, cobotique, impression 3D, jumeaux numériques</li>
+          <li>Flexibilité vs efficience : arbitrage permanent selon volatilité de la demande</li>
+          <li>Décarbonation : industrie = 24 % des émissions mondiales de CO₂ <span class="src">IEA, 2023</span></li>
+        </ul>
+      </div>
+      <div class="enjeu-card econ">
+        <div class="enjeu-type">📈 Économique</div>
+        <ul>
+          <li>Productivité manufacturière mondiale : +2,1 % / an en moyenne (2010–2022) <span class="src">OCDE, 2023</span></li>
+          <li>Coût de la non-qualité : 15–20 % du CA en industrie <span class="src">ASQ, Quality Cost Report, 2021</span></li>
+          <li>Économies d'échelle vs coûts de complexité (variété de SKUs)</li>
+        </ul>
+      </div>
+      <div class="enjeu-card fin">
+        <div class="enjeu-type">💰 Financier</div>
+        <ul>
+          <li>Immobilisation en WIP (Work in Progress) : en moyenne 8 % du CA <span class="src">PwC Working Capital Survey, 2022</span></li>
+          <li>ROI des investissements Lean : médiane de 3:1 à 5:1 en 3 ans <span class="src">McKinsey Operations, 2019</span></li>
+          <li>Coûts énergétiques en hausse : +120 % gaz naturel EU entre 2021 et 2022 <span class="src">Eurostat, 2023</span></li>
+        </ul>
+      </div>
+      <div class="enjeu-card hum">
+        <div class="enjeu-type">👥 Humain</div>
+        <ul>
+          <li>Pénurie de techniciens qualifiés : 2,1 millions de postes non pourvus en manufacturing US d'ici 2030 <span class="src">Deloitte/NAM, 2022</span></li>
+          <li>Conditions ergonomiques : TMS = 30 % des maladies professionnelles en France <span class="src">INRS, 2023</span></li>
+          <li>Transition vers la supervision de systèmes automatisés (upskilling)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 3 : STOCKAGE -->
+  <section class="chapter fade-in" id="stock">
+    <div class="chapter-header">
+      <div class="chapter-num">03</div>
+      <div class="chapter-title-group">
+        <div class="chapter-sub">Troisième maillon</div>
+        <h2>Stockage & Entreposage</h2>
+      </div>
+    </div>
+
+    <p>L'entreposage (<em>warehousing</em>) est le maillon qui assure la disponibilité des produits entre les étapes de production et de distribution. Il gère les flux entrants (<em>inbound</em>), le stockage physique, et les flux sortants (<em>outbound</em>), en visant un équilibre entre coût d'immobilisation et niveau de service.</p>
+
+    <h3>3.1 Fonctions économiques du stock</h3>
+    <p>Les stocks remplissent plusieurs fonctions économiques distinctes, qu'il convient de qualifier avant de chercher à les réduire :</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Type de stock</th><th>Raison d'être</th><th>Levier de réduction</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Stock cyclique</td><td>Lissage des lancements (lot économique)</td><td>Réduction des tailles de lot, SMED</td></tr>
+          <tr><td>Stock de sécurité</td><td>Couverture de l'incertitude (délai, demande)</td><td>Amélioration des prévisions, délais fournisseurs</td></tr>
+          <tr><td>Stock spéculatif</td><td>Anticipation de hausses de prix ou pénuries</td><td>Contrats à terme, couverture financière</td></tr>
+          <tr><td>Stock en transit</td><td>Produits en cours de transport</td><td>Optimisation réseaux logistiques</td></tr>
+          <tr><td>Stock de présentation</td><td>Merchandising, linéaire en distribution</td><td>Réduction des emplacements, planogrammes</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>3.2 Dimensionnement du stock de sécurité</h3>
+    <p>Dans le cas d'une demande D suivant une loi normale <em>N(μ_D, σ_D)</em> et d'un délai d'approvisionnement L suivant une loi normale <em>N(μ_L, σ_L)</em>, le stock de sécurité s'écrit :</p>
+
+    <div class="formula">
+      <span class="hl">SS = z_α × √( μ_L · σ_D² + μ_D² · σ_L² )</span><br><br>
+      <span class="comment">// où z_α est le factile de la loi normale standard :</span><br>
+      z_α = 1,645  →  taux de service α = 95 %<br>
+      z_α = 2,054  →  taux de service α = 98 %<br>
+      z_α = 2,326  →  taux de service α = 99 %<br><br>
+      <span class="comment">// Cas simplifié (σ_L ≈ 0) : SS = z_α × σ_D × √μ_L</span>
+    </div>
+
+    <h3>3.3 Technologies et organisation d'entrepôt</h3>
+
+    <h4>Systèmes de gestion (WMS)</h4>
+    <p>Un <strong>WMS</strong> (<em>Warehouse Management System</em>) pilote les opérations d'entrepôt en temps réel : réception, putaway, picking, packing, expédition. Les leaders du marché en 2024 sont Manhattan Associates, Blue Yonder et SAP Extended WM <span class="src">Gartner Magic Quadrant WMS, 2023</span>. Le marché mondial des WMS est estimé à <strong>3,5 Md$</strong> en 2023, avec un CAGR de 16 % attendu <span class="src">MarketsandMarkets, 2023</span>.</p>
+
+    <h4>Technologies d'automatisation</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Technologie</th><th>Application</th><th>ROI typique</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>AGV / AMR</td><td>Transport intra-entrepôt autonome</td><td>2–4 ans</td></tr>
+          <tr><td>Goods-to-Person (GTP)</td><td>Systèmes automatisés de stockage/récupération (AS/RS)</td><td>3–5 ans</td></tr>
+          <tr><td>Picking robotisé</td><td>Bras robotiques (Locus, 6 River Systems)</td><td>2–3 ans</td></tr>
+          <tr><td>RFID</td><td>Traçabilité temps réel, inventaire automatisé</td><td>1–3 ans</td></tr>
+          <tr><td>Drones d'inventaire</td><td>Comptage automatique hauteur de rayonnages</td><td>1–2 ans</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">25 %</div>
+        <div class="stat-lbl">Réduction des erreurs de picking par RFID</div>
+        <div class="stat-src">GS1 / MIT Auto-ID Lab</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">3×</div>
+        <div class="stat-lbl">Gain de productivité picking (GTP vs manuel)</div>
+        <div class="stat-src">Fraunhofer IML, 2022</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">30 %</div>
+        <div class="stat-lbl">Espace économisé (AS/RS vs stockage conventionnel)</div>
+        <div class="stat-src">MHIA, 2023</div>
+      </div>
+    </div>
+
+    <h3>3.4 Indicateurs clés</h3>
+    <ul class="kpi-list">
+      <li><span class="kpi-name">Rotation des stocks</span><span class="kpi-desc">= Coût des ventes / Stock moyen. Benchmark automobile : 12–20 rotations/an. Distribution alimentaire : 25–50</span></li>
+      <li><span class="kpi-name">Jours de couverture</span><span class="kpi-desc">= Stock moyen / (CA annuel / 365). Cible industrie : 20–40 jours selon secteur</span></li>
+      <li><span class="kpi-name">Taux de remplissage</span><span class="kpi-desc"><em>Fill rate</em> : % lignes de commande livrées sans rupture. Cible : &gt; 98 %</span></li>
+      <li><span class="kpi-name">Précision d'inventaire</span><span class="kpi-desc">Taux de concordance stock système / stock physique. Cible RF/RFID : &gt; 99,5 %</span></li>
+      <li><span class="kpi-name">Coût / unité expédiée</span><span class="kpi-desc">Indicateur global d'efficience opérationnelle entrepôt. Comprend main-d'œuvre, loyer, énergie, amortissements</span></li>
+    </ul>
+
+    <h3>3.5 Enjeux</h3>
+    <div class="enjeux-grid">
+      <div class="enjeu-card strat">
+        <div class="enjeu-type">⚡ Stratégique</div>
+        <ul>
+          <li>Choix insourcing vs outsourcing (3PL) : le marché des 3PL représente 1 200 Md$ en 2023 <span class="src">Armstrong & Associates, 2023</span></li>
+          <li>Mutualisation des entrepôts pour PME (pooling)</li>
+          <li>Localisation : arbitrage coût immobilier / proximité marché / accessibilité infrastructures</li>
+        </ul>
+      </div>
+      <div class="enjeu-card econ">
+        <div class="enjeu-type">📈 Économique</div>
+        <ul>
+          <li>Coût de possession des stocks : 20–30 % de la valeur du stock / an (capital immobilisé, obsolescence, espace) <span class="src">APICS CSCP study materials, 2022</span></li>
+          <li>Marché immobilier logistique EU : loyers en hausse de +40 % entre 2019 et 2023 <span class="src">CBRE Logistics Report, 2023</span></li>
+        </ul>
+      </div>
+      <div class="enjeu-card fin">
+        <div class="enjeu-type">💰 Financier</div>
+        <ul>
+          <li>Le BFR lié aux stocks représente en moyenne 12 % du CA en industrie <span class="src">PwC, 2022</span></li>
+          <li>Dépréciation et obsolescence : 2–5 % / an selon secteur (mode : &gt; 15 %)</li>
+          <li>Assurance et sécurisation des entrepôts : 0,1–0,3 % de la valeur du stock/an</li>
+        </ul>
+      </div>
+      <div class="enjeu-card hum">
+        <div class="enjeu-type">👥 Humain</div>
+        <ul>
+          <li>Taux de turnover entrepôt : jusqu'à 60 % par an en e-commerce <span class="src">Logistics Management, 2022</span></li>
+          <li>Pénibilité : port de charges, travail posté, froid — 40 % des AT en logistique <span class="src">INRS, 2023</span></li>
+          <li>Transition vers des rôles de superviseur de robots (requalification nécessaire)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 4 : DISTRIBUTION -->
+  <section class="chapter fade-in" id="distrib">
+    <div class="chapter-header">
+      <div class="chapter-num">04</div>
+      <div class="chapter-title-group">
+        <div class="chapter-sub">Quatrième maillon</div>
+        <h2>Distribution & Livraison</h2>
+      </div>
+    </div>
+
+    <p>La distribution est l'ensemble des processus permettant d'acheminer les produits depuis les points de stockage jusqu'aux clients finaux ou points de vente, dans les meilleures conditions de délai, coût et qualité. Elle mobilise des moyens de transport, des réseaux de distribution et des technologies TMS (<em>Transport Management Systems</em>).</p>
+
+    <h3>4.1 Modes de transport et caractéristiques comparées</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Mode</th><th>Part modale EU (tkm)</th><th>Coût relatif</th><th>CO₂ (gCO₂/tkm)</th><th>Délai</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Route (camion)</td><td>49,8 %</td><td>Élevé</td><td>62–115</td><td>Flexible</td></tr>
+          <tr><td>Ferroviaire</td><td>18,6 %</td><td>Moyen</td><td>22–35</td><td>Moyen–long</td></tr>
+          <tr><td>Maritime court-courrier</td><td>14,4 %</td><td>Faible</td><td>5–18</td><td>Long</td></tr>
+          <tr><td>Maritime deep sea</td><td>—</td><td>Très faible</td><td>8–12</td><td>Très long</td></tr>
+          <tr><td>Aérien</td><td>0,3 %</td><td>Très élevé</td><td>500–700</td><td>Très court</td></tr>
+          <tr><td>Fluvial</td><td>3,7 %</td><td>Faible</td><td>20–30</td><td>Long</td></tr>
+          <tr><td>Pipeline</td><td>12,8 %</td><td>Très faible</td><td>&lt;1</td><td>Variable</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;">Source : Eurostat (Transport Statistics, 2022) ; ADEME Bilan Carbone (2023)</p>
+    </div>
+
+    <h3>4.2 Conception des réseaux de distribution</h3>
+    <p>L'optimisation d'un réseau de distribution est un problème combinatoire NP-difficile relevant de la <em>facility location theory</em> et des modèles de routage (VRP — <em>Vehicle Routing Problem</em>). Les paramètres clés sont :</p>
+
+    <div class="formula">
+      <span class="comment">// Modèle de localisation simple (p-median)</span><br>
+      <span class="hl">min Σ_i Σ_j d_ij · x_ij · w_j</span><br><br>
+      <span class="comment">s.c.   Σ_j y_j = p   (p entrepôts à ouvrir)</span><br>
+      <span class="comment">       Σ_j x_ij = 1   ∀i  (chaque client affecté à 1 entrepôt)</span><br>
+      <span class="comment">       x_ij ≤ y_j       (client affecté uniquement si entrepôt ouvert)</span><br><br>
+      d_ij = distance/coût client i → entrepôt j ; w_j = demande client j
+    </div>
+
+    <h4>Stratégies de réseau</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Stratégie</th><th>Principe</th><th>Adapté pour</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Direct delivery</td><td>Usine → Client sans intermédiaire</td><td>ETO, B2B grands volumes, e-commerce DTC</td></tr>
+          <tr><td>Centralisation</td><td>1 ou 2 entrepôts centraux (CDC)</td><td>Produits à forte rotation, marchés denses</td></tr>
+          <tr><td>Réseau régionalisé</td><td>Entrepôts régionaux (RDC) + agences locales</td><td>Distribution B2C nationale</td></tr>
+          <tr><td>Cross-docking</td><td>Transit sans stockage (consolidation/déconsolidation)</td><td>FMCG, grande distribution (GMS)</td></tr>
+          <tr><td>Drop shipping</td><td>Fournisseur expédie directement au client final</td><td>E-commerce longue traîne</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>4.3 Dernier kilomètre (<em>last mile</em>)</h3>
+    <p>Le dernier kilomètre représente <strong>53 % du coût total de transport</strong> en livraison B2C <span class="src">Capgemini Research Institute, <em>Last Mile Delivery Challenge</em>, 2019</span>, pour seulement ~10 % de la distance parcourue. L'explosion du e-commerce a dramatiquement amplifié cet enjeu :</p>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">6,3 Md$</div>
+        <div class="stat-lbl">Marché last mile solutions mondial (2023)</div>
+        <div class="stat-src">Grand View Research, 2023</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">+25 %</div>
+        <div class="stat-lbl">Croissance du e-commerce EU (2020–2022)</div>
+        <div class="stat-src">Ecommerce Europe, 2023</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">15–20 %</div>
+        <div class="stat-lbl">Taux d'échec livraison 1ère tentative (B2C)</div>
+        <div class="stat-src">MetaPack / Metapack, 2022</div>
+      </div>
+    </div>
+
+    <p>Les innovations du last mile incluent : consignes automatiques, livraison par drones (tests Alphabet Wing, Amazon Prime Air), véhicules cargo électriques, crowdsourcing de la livraison (Stuart, Deliveroo B2B).</p>
+
+    <h3>4.4 TMS et optimisation des tournées</h3>
+    <p>Un <strong>TMS</strong> (<em>Transport Management System</em>) gère la planification des transports, l'allocation aux transporteurs, le suivi en temps réel et la facturation. Les algorithmes d'optimisation de tournées (VRP, VRPTW avec fenêtres de temps) permettent typiquement une <strong>réduction de 10 à 20 % des coûts de transport</strong> <span class="src">Kuehne+Nagel / Oracle TMS benchmark, 2021</span>.</p>
+
+    <h3>4.5 Indicateurs clés</h3>
+    <ul class="kpi-list">
+      <li><span class="kpi-name">OTIF</span><span class="kpi-desc">On Time In Full : livraison dans les délais et à quantité complète. Standard Walmart/grande distribution : &gt; 98 % (pénalités dès 85 %)</span></li>
+      <li><span class="kpi-name">Taux de remplissage camion</span><span class="kpi-desc">LF (<em>Load Factor</em>). EU moyenne : 57 % <span class="src">Eurostat, 2022</span>. Enjeu majeur de CO₂ et coût</span></li>
+      <li><span class="kpi-name">Coût / colis livré</span><span class="kpi-desc">KPI central e-commerce. Seuil de rentabilité typique en France : &gt; 7–9 € <span class="src">Xerfi, 2023</span></span></li>
+      <li><span class="kpi-name">Lead time livraison</span><span class="kpi-desc">Délai commande → réception. Compression continue : J+1 voire J+0 dans les zones denses</span></li>
+      <li><span class="kpi-name">Taux d'incidents transport</span><span class="kpi-desc">Avaries, pertes, retards non conformes. Cible &lt; 0,5 % en valeur</span></li>
+    </ul>
+
+    <h3>4.6 Enjeux</h3>
+    <div class="enjeux-grid">
+      <div class="enjeu-card strat">
+        <div class="enjeu-type">⚡ Stratégique</div>
+        <ul>
+          <li>Omnicanalité : fusion des flux e-commerce et physique (BOPIS, Ship-from-Store)</li>
+          <li>Dépendance aux transporteurs (pénurie chauffeurs : 400 000 postes vacants en EU <span class="src">IRU, 2022</span>)</li>
+          <li>Décarbonation du transport : objectif −55 % CO₂ d'ici 2030 (Green Deal EU)</li>
+        </ul>
+      </div>
+      <div class="enjeu-card econ">
+        <div class="enjeu-type">📈 Économique</div>
+        <ul>
+          <li>Inflation fret maritime : SCFI × 5 en 2021–2022 lors de la crise des conteneurs <span class="src">Shanghai Containerized Freight Index, 2022</span></li>
+          <li>Coût carburant : variable, représente 30–40 % du coût de transport routier</li>
+          <li>Tendance à la régionalisation des flux pour réduire dépendances lointaines</li>
+        </ul>
+      </div>
+      <div class="enjeu-card fin">
+        <div class="enjeu-type">💰 Financier</div>
+        <ul>
+          <li>Transport = 40–60 % des coûts logistiques totaux <span class="src">CSCMP State of Logistics, 2023</span></li>
+          <li>Couverture du risque fret : produits dérivés sur indices fret (Baltic Dry Index, SCFI)</li>
+          <li>Assurance transit : obligatoire, 0,1–0,5 % de la valeur de la marchandise</li>
+        </ul>
+      </div>
+      <div class="enjeu-card hum">
+        <div class="enjeu-type">👥 Humain</div>
+        <ul>
+          <li>Conditions des chauffeurs : temps de conduite, droit du travail, différentiel salarial UE (dumping social)</li>
+          <li>Sinistralité routière professionnelle : accidents du travail de trajet = 30 % des décès AT <span class="src">INRS, 2023</span></li>
+          <li>Uberisation de la livraison du dernier km : statut indépendant contesté (Cour de Cassation, 2022)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 5 : SAV -->
+  <section class="chapter fade-in" id="sav">
+    <div class="chapter-header">
+      <div class="chapter-num">05</div>
+      <div class="chapter-title-group">
+        <div class="chapter-sub">Cinquième maillon</div>
+        <h2>Service Après-Vente & Logistique Inverse</h2>
+      </div>
+    </div>
+
+    <p>Le SAV est souvent le maillon le plus négligé de la supply chain, alors qu'il constitue un levier majeur de fidélisation, de revenus récurrents et de différenciation concurrentielle. Il englobe la gestion des garanties, réparations, retours (<em>reverse logistics</em>) et retraitement en fin de vie (<em>End-of-Life</em>).</p>
+
+    <h3>5.1 Logistique inverse (Reverse Logistics)</h3>
+    <div class="def-box">
+      <div class="def-label">Définition — Rogers & Tibben-Lembke (1998), Going Backwards: Reverse Logistics Trends and Practices</div>
+      <p>« Le processus de planification, d'implémentation et de contrôle du flux efficace et économiquement rentable des matières premières, en-cours de fabrication, produits finis, et informations associées, du point de consommation jusqu'au point d'origine, dans le but de récupérer de la valeur ou d'en disposer correctement. »</p>
+    </div>
+
+    <h4>Les flux de retours</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Type de retour</th><th>Taux typique</th><th>Valeur récupérable</th><th>Traitement prioritaire</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Retours e-commerce (mode)</td><td>25–40 % des commandes</td><td>Réintégration stock / déstockage</td><td>Tri, reconditionnement, revente</td></tr>
+          <tr><td>Retours e-commerce (électronique)</td><td>10–15 %</td><td>Élevée</td><td>Remanufacturing, pièces détachées</td></tr>
+          <tr><td>Garantie / défaut qualité</td><td>1–3 %</td><td>Faible (coût SAV)</td><td>Réparation ou remplacement</td></tr>
+          <tr><td>Rappels produits</td><td>Événementiel</td><td>Nulle (coût + réputation)</td><td>Destruction sécurisée ou correctif</td></tr>
+          <tr><td>Fin de vie / DEEE</td><td>Réglementaire (REP)</td><td>Matières recyclables</td><td>Filières agrées recyclage</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">642 Md$</div>
+        <div class="stat-lbl">Coût des retours e-commerce US (2022)</div>
+        <div class="stat-src">NRF, 2023</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">16,5 %</div>
+        <div class="stat-lbl">Taux de retour moyen e-commerce US</div>
+        <div class="stat-src">NRF, 2023</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">5–8 ×</div>
+        <div class="stat-lbl">Coût logistique retour vs aller</div>
+        <div class="stat-src">DHL Supply Chain, 2022</div>
+      </div>
+    </div>
+
+    <h3>5.2 Organisation du SAV : Field Service Management</h3>
+    <p>Pour les équipements industriels (machines-outils, électroménager, matériel médical), le SAV s'organise autour du <em>Field Service Management</em> (FSM), qui pilote les interventions sur site. La maturité SAV se hiérarchise en 4 niveaux :</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Niveau</th><th>Modèle</th><th>Caractéristique</th><th>KPI cible</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Niveau 1</td><td>Réactif</td><td>Intervention après panne (Break/Fix)</td><td>MTTR &lt; 4h</td></tr>
+          <tr><td>Niveau 2</td><td>Préventif</td><td>Maintenance planifiée selon intervalles fixes</td><td>OEE &gt; 80 %</td></tr>
+          <tr><td>Niveau 3</td><td>Prédictif</td><td>Capteurs IoT + ML pour anticiper les pannes</td><td>MTBF × 2</td></tr>
+          <tr><td>Niveau 4</td><td>Prescriptif</td><td>IA prescrit l'action optimale avant la panne</td><td>0 panne non planifiée</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Le marché mondial de la maintenance prédictive est estimé à <strong>23,5 Md$</strong> en 2023, avec un CAGR de 25,2 % d'ici 2028 <span class="src">MarketsandMarkets, 2023</span>. Des études Siemens et GE montrent que la maintenance prédictive réduit les coûts de maintenance de <strong>10 à 25 %</strong> et les temps d'arrêt non planifiés de <strong>35 à 45 %</strong> <span class="src">McKinsey Analytics, 2017 ; Siemens Digital Industries, 2022</span>.</p>
+
+    <h3>5.3 Gestion des pièces de rechange</h3>
+    <p>La gestion des pièces de rechange (<em>spare parts management</em>) est un cas particulier d'approvisionnement avec une demande intermittente, stochastique et très hétérogène. Elle mobilise des modèles probabilistes spécifiques :</p>
+
+    <div class="formula">
+      <span class="comment">// Modèle de Croston (1972) pour demande intermittente</span><br>
+      <span class="hl">d̂_t = a_t / p_t</span><br><br>
+      a_t = (1−α)·a_{t-1} + α·z_t   <span class="comment">// SES sur taille des demandes non nulles</span><br>
+      p_t = (1−β)·p_{t-1} + β·q_t   <span class="comment">// SES sur intervalles entre demandes</span><br><br>
+      <span class="comment">// z_t = taille de la demande à l'instant t (si demande &gt; 0)</span><br>
+      <span class="comment">// q_t = intervalle depuis la dernière demande non nulle</span>
+    </div>
+
+    <h3>5.4 Économie circulaire et réglementation</h3>
+    <p>Le SAV est au cœur des enjeux d'économie circulaire. En France, la loi AGEC (<em>Anti-Gaspillage pour une Économie Circulaire</em>, 2020) impose notamment :</p>
+    <ul style="padding-left:1.5rem;line-height:2;">
+      <li>La disponibilité des pièces détachées pendant <strong>5 à 10 ans</strong> selon les produits</li>
+      <li>L'<strong>indice de réparabilité</strong> obligatoire depuis 2021 (électronique, electroménager)</li>
+      <li>Les filières REP (<em>Responsabilité Élargie du Producteur</em>) pour DEEE, emballages, textiles</li>
+    </ul>
+
+    <p>L'économie du remanufacturing représente un marché de <strong>100 Md$</strong> aux États-Unis (secteurs automobile, aéronautique, équipements industriels) <span class="src">USITC — US International Trade Commission, 2012 — chiffres actualisés par Ellen MacArthur Foundation, 2021</span>.</p>
+
+    <h3>5.5 Indicateurs clés</h3>
+    <ul class="kpi-list">
+      <li><span class="kpi-name">First Call Resolution</span><span class="kpi-desc">% de problèmes résolus au 1er contact / 1ère intervention. Cible : &gt; 80 %</span></li>
+      <li><span class="kpi-name">CSAT / NPS</span><span class="kpi-desc">Customer Satisfaction Score / Net Promoter Score SAV. Corrélation directe avec la fidélisation</span></li>
+      <li><span class="kpi-name">MTTR</span><span class="kpi-desc">Mean Time To Repair : délai moyen de remise en état. Cible industrie critique : &lt; 4 h</span></li>
+      <li><span class="kpi-name">Taux de retours traités</span><span class="kpi-desc">% retours reçus / traités dans les délais légaux ou contractuels</span></li>
+      <li><span class="kpi-name">Reverse logistics cost %</span><span class="kpi-desc">Coût de la logistique inverse en % du CA. Benchmark : 0,5–1,5 % <span class="src">RSM, 2022</span></span></li>
+      <li><span class="kpi-name">Taux de réemploi</span><span class="kpi-desc">Part des retours remis en vente (reconditionnés) vs détruits. Enjeu RSE et financier majeur</span></li>
+    </ul>
+
+    <h3>5.6 Enjeux</h3>
+    <div class="enjeux-grid">
+      <div class="enjeu-card strat">
+        <div class="enjeu-type">⚡ Stratégique</div>
+        <ul>
+          <li>Servitisation : passage de la vente de produits à la vente d'usages (XaaS, PaaS)</li>
+          <li>Rolls-Royce : « Power by the Hour » — avions facturés à l'heure de vol depuis 1962</li>
+          <li>Différenciation par la qualité du SAV : facteur n°1 de rétention client B2B <span class="src">Bain & Company, 2023</span></li>
+        </ul>
+      </div>
+      <div class="enjeu-card econ">
+        <div class="enjeu-type">📈 Économique</div>
+        <ul>
+          <li>Le SAV génère 40–70 % des marges d'un fabricant d'équipements industriels <span class="src">Aberdeen Group, 2021</span></li>
+          <li>Retour non traité = perte sèche de 4 à 7 × le prix d'achat en coûts totaux <span class="src">Optoro, 2022</span></li>
+          <li>Marché du reconditionné : 65 Md$ en Europe en 2023 <span class="src">Back Market / Kantar, 2023</span></li>
+        </ul>
+      </div>
+      <div class="enjeu-card fin">
+        <div class="enjeu-type">💰 Financier</div>
+        <ul>
+          <li>Provisions garantie : 1–3 % du CA selon secteur (IFRS obligatoire)</li>
+          <li>Valorisation actif de stock pièces : risque d'obsolescence élevé à provisionner</li>
+          <li>Contrats de maintenance (SLA) : revenu récurrent à haute visibilité financière</li>
+        </ul>
+      </div>
+      <div class="enjeu-card hum">
+        <div class="enjeu-type">👥 Humain</div>
+        <ul>
+          <li>Techniciens SAV : métier en forte tension, expertise rare (vieillissement du parc installé)</li>
+          <li>Impact sur l'emploi dans le reconditionnement : fort contenu en main-d'œuvre peu substituable par l'automation</li>
+          <li>Satisfaction client = pilier de la culture d'entreprise (formation, incentives)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 6 : NUMÉRIQUE -->
+  <section class="chapter fade-in" id="numerique">
+    <div class="chapter-header">
+      <div class="chapter-num">06</div>
+      <div class="chapter-title-group">
+        <div class="chapter-sub">Enjeux transversaux</div>
+        <h2>Transformation Numérique de la Supply Chain</h2>
+      </div>
+    </div>
+
+    <p>La digitalisation de la supply chain est un vecteur transversal qui redéfinit chaque maillon, en permettant une visibilité en temps réel, une prise de décision augmentée et une automatisation accrue.</p>
+
+    <h3>6.1 Architecture technologique</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Couche</th><th>Technologies</th><th>Rôle dans la SC</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Collecte de données</td><td>RFID, IoT, capteurs, EAN/GS1, EDI</td><td>Traçabilité, mesure physique en temps réel</td></tr>
+          <tr><td>Plateforme de données</td><td>ERP (SAP, Oracle), Data Lake, API</td><td>Centralisation, cohérence des données</td></tr>
+          <tr><td>Planification avancée</td><td>APS (Blue Yonder, Kinaxis), ML, IA</td><td>S&OP, prévisions, ordonnancement</td></tr>
+          <tr><td>Exécution</td><td>WMS, TMS, MES, OMS</td><td>Pilotage opérationnel temps réel</td></tr>
+          <tr><td>Visibilité réseau</td><td>Control Tower (project44, FourKites)</td><td>Suivi multi-tiers, alertes, scénarios</td></tr>
+          <tr><td>IA générative / LLM</td><td>GPT-4o, Gemini, Claude intégrés aux ERP</td><td>Analyse, recommandation, automatisation tâches cognitives</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout gold">
+      <strong>Chiffre clé :</strong> Les entreprises disposant d'une visibilité supply chain temps réel (<em>end-to-end visibility</em>) réduisent leur inventaire de <strong>20 à 30 %</strong>, leur coût de transport de <strong>10 à 15 %</strong> et améliorent leur taux de service de <strong>5 à 8 points</strong> <span class="src">McKinsey Digital, <em>Supply Chain 4.0</em>, 2021</span>.
+    </div>
+
+    <h3>6.2 Prévision de la demande par IA</h3>
+    <p>La précision des prévisions de demande est l'un des leviers les plus puissants de la supply chain. Une réduction de 20 % du MAPE (<em>Mean Absolute Percentage Error</em>) permet en théorie une réduction de <strong>15–25 % des stocks de sécurité</strong> <span class="src">Syntetos & Boylan, JORS 2006 ; validé par Gartner 2020</span>. Les modèles récents (Transformer-based, Amazon DeepAR, N-BEATS) surpassent les méthodes classiques (Holt-Winters, ARIMA) sur des données de 10 000+ SKUs <span class="src">Oreshkin et al., NeurIPS 2019</span>.</p>
+
+    <h3>6.3 Blockchain dans la supply chain</h3>
+    <p>La blockchain apporte une traçabilité immuable et décentralisée. Les cas d'usage validés à l'échelle industrielle incluent Walmart Food Safety (traçabilité alimentaire : de 7 jours à <strong>2,2 secondes</strong> pour identifier l'origine d'un lot contaminé <span class="src">IBM Food Trust / Walmart, 2018</span>) et Maersk TradeLens pour la documentation de fret maritime. Cependant, l'adoption reste limitée par les problèmes d'interopérabilité et de gouvernance multi-acteurs.</p>
+  </section>
+
+  <!-- CHAPITRE 7 : RÉSILIENCE -->
+  <section class="chapter fade-in" id="resilience">
+    <div class="chapter-header">
+      <div class="chapter-num">07</div>
+      <div class="chapter-title-group">
+        <div class="chapter-sub">Enjeux transversaux</div>
+        <h2>Résilience & Gestion des Risques</h2>
+      </div>
+    </div>
+
+    <p>Les crises récentes (COVID-19, canal de Suez 2021, pénurie de semi-conducteurs 2020–2023, tensions géopolitiques) ont mis en lumière la fragilité des supply chains ultra-optimisées au coût marginal. La résilience devient un impératif stratégique au même titre que l'efficience.</p>
+
+    <h3>7.1 Taxonomie des risques supply chain</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Catégorie</th><th>Exemples</th><th>Probabilité</th><th>Impact</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Risques opérationnels</td><td>Panne machine, erreur picking, rupture fournisseur</td><td>Élevée</td><td>Modéré</td></tr>
+          <tr><td>Risques géopolitiques</td><td>Embargo, droits de douane, instabilité politique</td><td>Faible–Modérée</td><td>Élevé</td></tr>
+          <tr><td>Risques naturels / climatiques</td><td>Inondations, séismes, sécheresses (eau pour semi-conducteurs)</td><td>Croissante</td><td>Élevé</td></tr>
+          <tr><td>Risques sanitaires</td><td>Pandémies, crises alimentaires</td><td>Rare</td><td>Extrême</td></tr>
+          <tr><td>Risques cyber</td><td>Ransomware, attaques SI (Maersk/NotPetya 2017 : 300 M$)</td><td>Croissante</td><td>Élevé</td></tr>
+          <tr><td>Risques financiers</td><td>Défaillance fournisseur, fluctuation de change</td><td>Variable</td><td>Modéré–Élevé</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>COVID-19 :</strong> Les perturbations supply chain dues à la pandémie ont coûté en moyenne <strong>184 M$ par entreprise</strong> dans les grandes multinationales <span class="src">McKinsey, 2021</span>. 93 % des DSC (<em>Directors of Supply Chain</em>) ont déclaré une perturbation majeure entre 2020 et 2022 <span class="src">Gartner SC Survey, 2022</span>.
+    </div>
+
+    <h3>7.2 Stratégies de résilience</h3>
+    <p>Sheffi & Rice (MIT, 2005) et Christopher & Peck (2004) ont formalisé les stratégies de résilience supply chain selon deux axes : <strong>redondance</strong> (coûteuse) vs <strong>flexibilité</strong> (plus agile). Le cadre <em>Triple-A</em> de Hau Lee (<em>Harvard Business Review</em>, 2004) prescrit :</p>
+    <ul style="list-style:none;padding:0;">
+      <li style="padding:0.4rem 0;border-bottom:1px dashed var(--divider);">→ <strong>Agility</strong> (Agilité) : capacité à répondre rapidement aux disruptions (stocks stratégiques, capacité flex)</li>
+      <li style="padding:0.4rem 0;border-bottom:1px dashed var(--divider);">→ <strong>Adaptability</strong> (Adaptabilité) : redesign structurel du réseau face aux changements longs</li>
+      <li style="padding:0.4rem 0;border-bottom:1px dashed var(--divider);">→ <strong>Alignment</strong> (Alignement) : partage d'intérêts entre tous les acteurs de la chaîne</li>
+    </ul>
+  </section>
+
+  <!-- CHAPITRE 8 : DURABILITE -->
+  <section class="chapter fade-in" id="durabilite">
+    <div class="chapter-header">
+      <div class="chapter-num">08</div>
+      <div class="chapter-title-group">
+        <div class="chapter-sub">Enjeux transversaux</div>
+        <h2>Durabilité & RSE dans la Supply Chain</h2>
+      </div>
+    </div>
+
+    <p>La supply chain est au cœur des enjeux de responsabilité sociétale et environnementale des entreprises. Elle concentre les émissions Scope 3 (<em>amont</em> et <em>aval</em>), les enjeux de travail décent et de droits humains, et les flux de matières à circulariser.</p>
+
+    <h3>8.1 Émissions Scope 3 : la supply chain comme principal levier climatique</h3>
+    <p>Selon le <em>GHG Protocol</em>, le Scope 3 représente en moyenne <strong>70 à 90 % des émissions totales</strong> d'une entreprise industrielle <span class="src">CDP Supply Chain Report, 2022</span>. Il couvre les achats (catégorie 1), le transport amont (catégorie 4), les actifs loués (catégorie 8), l'utilisation des produits vendus (catégorie 11), et la fin de vie des produits (catégorie 12).</p>
+
+    <div class="callout steel">
+      <strong>Réglementation :</strong> La directive CSRD (<em>Corporate Sustainability Reporting Directive</em>, applicable en France depuis 2024 pour les grandes entreprises) impose un reporting extra-financier incluant les émissions Scope 3 et une analyse de double matérialité. La directive CS3D (<em>Corporate Sustainability Due Diligence Directive</em>, 2024) impose un devoir de vigilance supply chain pour les entreprises de &gt;1 000 employés.
+    </div>
+
+    <h3>8.2 Vers la Green Supply Chain</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Maillon</th><th>Levier de décarbonation</th><th>Potentiel de réduction</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Approvisionnement</td><td>Sourcing local, critères ESG fournisseurs</td><td>−10 à −30 % Scope 3 cat.1</td></tr>
+          <tr><td>Production</td><td>Efficacité énergétique, électrification, ISO 50001</td><td>−30 à −50 % Scope 1+2</td></tr>
+          <tr><td>Stockage</td><td>Entrepôts passifs / BREEAM, éclairage LED, toitures PV</td><td>−20 à −40 % consommation entrepôt</td></tr>
+          <tr><td>Transport</td><td>Modal shift route → rail/fluvial, VE, écoconduite</td><td>−30 à −80 % selon mode</td></tr>
+          <tr><td>SAV / Fin de vie</td><td>Réparation, remanufacturing, recyclage matières</td><td>Économie circulaire : jusqu'à −70 %</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;">Sources : ADEME, IEA, Ellen MacArthur Foundation (2023)</p>
+    </div>
+
+    <h3>8.3 Droits humains et travail décent</h3>
+    <p>La supply chain globale mobilise des millions de travailleurs dans des contextes réglementaires très hétérogènes. Les outils de contrôle incluent les audits fournisseurs (référentiels SA8000, SMETA, sedex), les labels (Fair Trade, B-Corp) et les plateformes de cartographie des risques (EcoVadis, Resilinc). L'OIT (<em>Organisation Internationale du Travail</em>) estime à <strong>49 millions</strong> le nombre de personnes en situation de travail forcé en 2021, concentrées dans les filières textile, électronique et agriculture <span class="src">ILO Global Estimates of Modern Slavery, 2022</span>.</p>
+  </section>
+
+  <!-- BIBLIOGRAPHIE -->
+  <section class="references" id="biblio">
+    <h2>Références Bibliographiques & Sources</h2>
+    <ol>
+      <li><strong>CSCMP — Council of Supply Chain Management Professionals.</strong> <em>CSCMP Supply Chain Management Definitions and Glossary.</em> 2023. cscmp.org</li>
+      <li><strong>APICS/ASCM.</strong> <em>SCOR Digital Standard v4.0.</em> 2023. ascm.org</li>
+      <li><strong>Kraljic, P.</strong> "Purchasing Must Become Supply Management." <em>Harvard Business Review</em>, Sept–Oct 1983.</li>
+      <li><strong>Womack, J., Jones, D., Roos, D.</strong> <em>The Machine That Changed the World.</em> Rawson, 1990.</li>
+      <li><strong>Womack, J., Jones, D.</strong> <em>Lean Thinking.</em> Free Press, 1996.</li>
+      <li><strong>Goldratt, E.</strong> <em>The Goal.</em> North River Press, 1984.</li>
+      <li><strong>Rogers, D., Tibben-Lembke, R.</strong> <em>Going Backwards: Reverse Logistics Trends and Practices.</em> Reverse Logistics Executive Council, 1998.</li>
+      <li><strong>Lee, H.L.</strong> "The Triple-A Supply Chain." <em>Harvard Business Review</em>, Oct 2004.</li>
+      <li><strong>Christopher, M., Peck, H.</strong> "Building the Resilient Supply Chain." <em>The International Journal of Logistics Management</em>, 2004.</li>
+      <li><strong>Sheffi, Y., Rice, J.B.</strong> "A Supply Chain View of the Resilient Enterprise." <em>MIT Sloan Management Review</em>, 2005.</li>
+      <li><strong>McKinsey Global Institute.</strong> <em>Risk, resilience, and rebalancing in global value chains.</em> 2020.</li>
+      <li><strong>McKinsey Operations.</strong> <em>Supply Chain 4.0 – the next-generation digital supply chain.</em> 2021.</li>
+      <li><strong>Gartner.</strong> <em>Magic Quadrant for Warehouse Management Systems.</em> 2023.</li>
+      <li><strong>Gartner.</strong> <em>Supply Chain Top 25 Report.</em> 2023.</li>
+      <li><strong>Armstrong & Associates.</strong> <em>Global 3PL Market Size Estimates.</em> 2023.</li>
+      <li><strong>World Bank.</strong> <em>Logistics Performance Index.</em> 2023. lpi.worldbank.org</li>
+      <li><strong>Eurostat.</strong> <em>Transport Statistics — Modal Split of Freight Transport.</em> 2022.</li>
+      <li><strong>ADEME.</strong> <em>Bilan Carbone — Facteurs d'émission par mode de transport.</em> 2023.</li>
+      <li><strong>NRF — National Retail Federation.</strong> <em>The Annual Retail Returns Report.</em> 2023.</li>
+      <li><strong>ILO — Organisation Internationale du Travail.</strong> <em>Global Estimates of Modern Slavery.</em> 2022.</li>
+      <li><strong>INRS.</strong> <em>Statistiques des accidents du travail et maladies professionnelles.</em> 2023.</li>
+      <li><strong>PwC.</strong> <em>Working Capital Study 2022/23.</em> PricewaterhouseCoopers, 2022.</li>
+      <li><strong>Deloitte.</strong> <em>2023 Global Chief Procurement Officer Survey.</em> Deloitte, 2023.</li>
+      <li><strong>Capgemini Research Institute.</strong> <em>The Last-Mile Delivery Challenge.</em> 2019.</li>
+      <li><strong>IRU — International Road Transport Union.</strong> <em>Driver Shortage Report.</em> 2022.</li>
+      <li><strong>Ellen MacArthur Foundation.</strong> <em>Towards the Circular Economy.</em> 2021.</li>
+      <li><strong>CDP.</strong> <em>Supply Chain Report.</em> 2022. cdp.net</li>
+      <li><strong>MarketsandMarkets.</strong> <em>Predictive Maintenance Market Global Forecast.</em> 2023.</li>
+      <li><strong>Altares.</strong> <em>Défaillances d'entreprises en France — Bilan annuel.</em> 2024.</li>
+      <li><strong>CBRE.</strong> <em>European Logistics Market Report.</em> 2023.</li>
+    </ol>
+  </section>
+
+</main>
+
+<script>
+  // Progress bar
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.transform = `scaleX(${window.scrollY / max})`;
+  });
+
+  // Fade-in sections
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Active nav link
+  const sections = document.querySelectorAll('section[id], header[id]');
+  const links = document.querySelectorAll('#sidebar nav a');
+  const navObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`#sidebar nav a[href="#${e.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s => navObserver.observe(s));
+</script>
+
+</body>
+</html>
